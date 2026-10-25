@@ -133,10 +133,10 @@ class CopilotUI {
       root.querySelector('.cp-channel').textContent=this.state.link?`Discord voice: ${this.state.link.channelName} (${this.state.link.voiceChannelId}) · Campaign ${this.state.link.campaignId}`:'';
       root.querySelector('.cp-pair').textContent=this.pairText;
       root.querySelector('[data-cp="pause"]').textContent=this.state.paused?`Resume display (${this.state.pending.length} buffered)`:'Pause display';
-      const list=root.querySelector('.cp-transcripts');const follow=list.scrollHeight-list.scrollTop-list.clientHeight<50;
+      const list=root.querySelector('.cp-transcripts'),previousScrollTop=list.scrollTop;const follow=list.scrollHeight-list.scrollTop-list.clientHeight<50;
       list.replaceChildren(...this.state.rows.filter(e=>`${e.displayName} ${e.text}`.toLowerCase().includes(this.query)).map(e=>{
         const li=document.createElement('li');li.textContent=`${new Date(e.timestamp).toLocaleTimeString()} · ${e.displayName}${e.uncertain?' [uncertain]':''}\n${e.text}`;return li;
-      }));if(follow)list.scrollTop=list.scrollHeight;
+      }));list.scrollTop=follow?list.scrollHeight:previousScrollTop;
       root.querySelector('.cp-index-status').textContent=this.indexStatus;
       const available=this.adapter.accessibleEntries(),allowed=new Set(available.map(e=>e.uuid));
       const refs=this.referenceQuery?searchReferences(available,this.referenceQuery,this.preferences):[

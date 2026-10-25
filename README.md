@@ -12,7 +12,7 @@ https://raw.githubusercontent.com/Rhysbleh/Dungeon-Masters-Assistant/main/module
 
 Install, enable **Scribe DM Copilot** for your world, and reload. This version targets **Foundry v13 and v14**. Live Foundry rendering has not yet been acceptance-tested; v12 compatibility is not declared.
 
-For manual installation, extract [dm-copilot-0.1.1.zip](https://raw.githubusercontent.com/Rhysbleh/Dungeon-Masters-Assistant/main/artifacts/dm-copilot-0.1.1.zip) into Foundry's `Data/modules` directory. The archive contains `dm-copilot/module.json` and its scripts, template and stylesheet.
+For manual installation, extract [dm-copilot-0.1.2.zip](https://raw.githubusercontent.com/Rhysbleh/Dungeon-Masters-Assistant/main/artifacts/dm-copilot-0.1.2.zip) into Foundry's `Data/modules` directory. The archive contains `dm-copilot/module.json` and its scripts, template and stylesheet.
 
 ## Required backend setup
 
@@ -43,3 +43,7 @@ For the exact flow, limitations, credential revocation and consent behavior, see
 ## v0.1.1 compatibility update
 
 Added a version-selected sidebar adapter for v13/v14 and preserved customized sidebar registrations. The user's Foundry setup screen identifies v14 build 369. The documented v14 sidebar, compendium and UUID APIs were reviewed; adapter tests now cover both generations. The manifest allows v14, but full in-world rendering has not yet been live-verified.
+
+## v0.1.2 scrolling fix
+
+The native sidebar owns the outer vertical scroll so References and Session journal remain reachable on short displays. The transcript retains its own bounded scrolling region, and live updates preserve the reading position when the user has scrolled back. The layout was checked in a 600-pixel-high browser fixture using the deployed Foundry stylesheet and synthetic content; this does not claim a live-world update was applied.

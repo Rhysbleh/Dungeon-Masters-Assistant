@@ -1,8 +1,29 @@
-.scribe-copilot { padding: 0.6rem; overflow-y: auto; height: 100%; }
+/* The native tab owns the outer scroll; the panel must keep its natural height. */
+#dm-copilot.dm-copilot-tab {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+.dm-copilot-tab .window-content {
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+.scribe-copilot {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-height: 100%;
+  height: auto;
+  padding: 0.6rem;
+  overflow: visible;
+}
 .scribe-copilot label { display:block; margin:0.5rem 0; }
 .scribe-copilot input,.scribe-copilot select { width:100%; }
 .scribe-copilot button { margin:0.2rem 0; }
-.scribe-copilot .cp-transcripts { padding-left:1.3rem; max-height:42vh; overflow:auto; }
+.scribe-copilot .cp-transcripts { flex:0 0 auto; padding-left:1.3rem; max-height:42vh; overflow:auto; scrollbar-gutter:stable; }
 .scribe-copilot li { margin:0.5rem 0; overflow-wrap:anywhere; white-space:pre-wrap; }
 .scribe-copilot .cp-references { padding-left:1rem; }
 .scribe-copilot .cp-references small { display:block; opacity:0.8; }

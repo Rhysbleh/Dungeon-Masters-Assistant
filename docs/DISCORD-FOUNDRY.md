@@ -42,7 +42,7 @@ The command creates the campaign and DM association and prints a newly generated
 
 4. Install `foundry/dm-copilot` into Foundry's `Data/modules/dm-copilot`. The packaged ZIP has that directory at its root; extract it into `Data/modules`, then enable **Scribe DM Copilot** for your world and reload. The public installation manifest is https://raw.githubusercontent.com/Rhysbleh/Dungeon-Masters-Assistant/main/module.json.
 
-The supplied archive is `artifacts/dm-copilot-0.1.1.zip`. Rebuild it after source edits with `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-foundry.ps1`.
+The supplied archive is `artifacts/dm-copilot-0.1.2.zip`. Rebuild it after source edits with `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-foundry.ps1`.
 5. Register the full command list using the existing controller:
 
 ```powershell
@@ -54,6 +54,30 @@ This retains all `/session` subcommands and adds `/scribe pair`, `/scribe unlink
 6. As the provisioned Foundry GM, open the scroll-icon **DM Copilot** sidebar, expand Connection and pairing, enter the backend URL and private world credential, then Connect. The credential is held in that GM's browser tab session storage, scoped by world/user; it is never put in shared world settings. Disconnect and forget clears it. Protect the browser profile and trust installed Foundry modules because same-origin scripts can access browser storage.
 
 ## Pair and record
+
+### Remote HTTP Foundry with Scribe on the DM's PC
+
+A public HTTP Foundry page can be blocked by browser local-network protection when it fetches a loopback backend. CORS alone does not authorize that access. The optional fixed-destination local reverse proxy lets the DM open the **same remote Foundry server** on a loopback browser origin; Foundry is not installed or moved locally.
+
+For this mode, add the proxy to the existing Copilot configuration (replace the upstream example with the actual Foundry origin):
+
+```json
+"copilot": {
+  "enabled": true,
+  "host": "127.0.0.1",
+  "port": 47832,
+  "allowedOrigins": ["http://127.0.0.1:47833"],
+  "foundryProxy": {
+    "enabled": true,
+    "port": 47833,
+    "upstream": "http://foundry.example:30000"
+  }
+}
+```
+
+Restart Scribe between sessions. On that same PC, open **http://127.0.0.1:47833/join**, sign into the remote world as the same GM, and use **http://127.0.0.1:47833/__scribe** as the sidebar Backend URL. Copy the existing private world credential again; browser storage belongs to the new origin. The `/__scribe/v1/` routes forward to the authenticated local backend, while other HTTP routes and WebSockets forward to the fixed Foundry upstream.
+
+The proxy listens only on loopback, rejects foreign Origin/Host headers, preserves upstream CSP and cookie security attributes, and does not create another Discord client, transcription process, database or session manager. It does not introduce a public tunnel, disable browser security or add a third-party transcript relay. It preserves the upstream transport: an HTTP Foundry server still uses HTTP between this PC and that server. Other participants continue using their usual Foundry address. Remote login and in-world behavior require a real browser check; synthetic WebSocket transport tests alone do not establish that.
 
 1. In Foundry, Generate pairing code. The backend issues a 128-bit random code, stores its hash, and expires it after five minutes. Generating another invalidates the previous code for that credential.
 2. In the configured Discord guild, redeem `/scribe pair code:CODE channel:VOICE_CHANNEL`. Only a stored campaign DM or a Discord administrator who can view/connect to that voice channel can redeem it. Codes cannot be redeemed in another guild. Competing channel/world associations must be unlinked first.
