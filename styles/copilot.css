@@ -1,0 +1,11 @@
+.scribe-copilot { padding: 0.6rem; overflow-y: auto; height: 100%; }
+.scribe-copilot label { display:block; margin:0.5rem 0; }
+.scribe-copilot input,.scribe-copilot select { width:100%; }
+.scribe-copilot button { margin:0.2rem 0; }
+.scribe-copilot .cp-transcripts { padding-left:1.3rem; max-height:42vh; overflow:auto; }
+.scribe-copilot li { margin:0.5rem 0; overflow-wrap:anywhere; white-space:pre-wrap; }
+.scribe-copilot .cp-references { padding-left:1rem; }
+.scribe-copilot .cp-references small { display:block; opacity:0.8; }
+.scribe-copilot .cp-status { font-weight:bold; }
+.scribe-copilot details { margin:0.6rem 0; }
+.scribe-copilot .cp-summaries { white-space:pre-wrap; overflow-wrap:anywhere; }

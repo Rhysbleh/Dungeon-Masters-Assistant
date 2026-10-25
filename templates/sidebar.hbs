@@ -1,0 +1,34 @@
+<section class="scribe-copilot">
+  <h3>DM Copilot · Discord Scribe</h3>
+  <p class="cp-status" role="status">Disconnected</p>
+  <p class="cp-channel"></p>
+  <details class="cp-setup"><summary>Connection and pairing</summary>
+    <label>Backend URL <input class="cp-url" type="url" placeholder="http://127.0.0.1:47832"></label>
+    <label>Private world credential <input class="cp-token" type="password" autocomplete="off" placeholder="Operator-provisioned GM credential"></label>
+    <button type="button" data-cp="connect">Connect</button>
+    <button type="button" data-cp="disconnect">Disconnect and forget credential</button>
+    <button type="button" data-cp="pair">Generate pairing code</button>
+    <p class="cp-pair" role="status"></p>
+    <button type="button" data-cp="unlink">Unlink world</button>
+  </details>
+  <p>Only consenting Discord participants are captured. Pausing below pauses display; use Discord /session pause to pause recording.</p>
+  <button type="button" data-cp="pause">Pause display</button>
+  <label>Search displayed transcript <input class="cp-search" type="search" maxlength="200"></label>
+  <ol class="cp-transcripts" aria-label="Final transcripts"></ol>
+  <h3>References · suggestions</h3>
+  <label>Search accessible compendiums <input class="cp-reference-search" type="search" maxlength="100"></label>
+  <button type="button" data-cp="index">Refresh compendium names</button>
+  <details><summary>Compendium preferences</summary>
+    <label>Preferred pack IDs, in priority order <input class="cp-preferred" type="text"></label>
+    <label>Excluded pack IDs <input class="cp-excluded" type="text"></label>
+    <p>Pack sources remain visible. Duplicate editions are kept as separate UUIDs; choose the correct source.</p>
+    <button type="button" data-cp="preferences">Save campaign preferences</button>
+  </details>
+  <p class="cp-index-status"></p>
+  <ul class="cp-references"></ul>
+  <h3>Session journal · AI interpretation</h3>
+  <label>Session <select class="cp-session"></select></label>
+  <button type="button" data-cp="summary">Request session summary</button>
+  <button type="button" data-cp="summaries">Refresh journal</button>
+  <div class="cp-summaries"></div>
+</section>
