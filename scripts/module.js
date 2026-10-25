@@ -1,7 +1,8 @@
 import { CompendiumAdapter, detectReferences, searchReferences } from './references.js';
 import { consumeSSE, TranscriptState } from './stream.js';
+import { resolveSidebarAdapter } from './foundry-adapter.js';
 
-const ID='dm-copilot';let controller;
+const ID='dm-copilot';let controller,versionAdapter;
 class CopilotUI {
   constructor() {
     this.roots=new Set();this.state=new TranscriptState();this.references=[];this.query='';this.referenceQuery='';this.status='Disconnected';this.sessions=[];this.journal='';
@@ -160,19 +161,19 @@ class CopilotUI {
 
 Hooks.once('init',()=>{
   game.settings.register(ID,'references',{scope:'world',config:false,type:Object,default:{preferred:[],excluded:[],aliases:{}}});
-  if(game.release.generation!==13) {ui.notifications.warn('Scribe DM Copilot currently targets Foundry v13 only.');return;}
-  class CopilotTab extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.sidebar.AbstractSidebarTab) {
+  try {versionAdapter=resolveSidebarAdapter(foundry,CONFIG,game.release.generation);}
+  catch(error) {console.warn(error.message);ui.notifications?.warn(error.message);return;}
+  class CopilotTab extends versionAdapter.Base {
     static tabName=ID;
     static DEFAULT_OPTIONS={id:ID,classes:['dm-copilot-tab'],window:{title:'DM Copilot'}};
     static PARTS={panel:{template:`modules/${ID}/templates/sidebar.hbs`}};
     async _prepareContext(){return {};}
     async _onRender(context,options){await super._onRender(context,options);if(game.user.isGM)controller?.mount(this.element);else this.element.replaceChildren();}
   }
-  CONFIG.ui[ID]=CopilotTab;
-  foundry.applications.sidebar.Sidebar.TABS[ID]={icon:'fas fa-scroll',tooltip:'DM Copilot',gmOnly:true};
+  versionAdapter.register(ID,CopilotTab);
 });
 Hooks.once('ready',()=>{
-  if(!game.user.isGM || game.release.generation!==13)return;
+  if(!game.user.isGM || !versionAdapter)return;
   controller=new CopilotUI();void ui[ID]?.render({force:true});
   const token=sessionStorage.getItem(`${controller.key}:token`),base=sessionStorage.getItem(`${controller.key}:url`);
   if(token && base)void controller.connect(base,token).catch(e=>{controller.status=e.message;controller.update();});

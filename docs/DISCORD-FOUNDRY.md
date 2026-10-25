@@ -10,7 +10,7 @@ This increment extends the existing Scribe application. Discord continues to car
 - New sessions snapshot the current pairing. Historical/ongoing unlinked sessions are never automatically adopted. Unlinking prevents delivery and capture; stop the old session and drain recognition before pairing again.
 - Existing transcript retention deletes associated delivery events through cascading session foreign keys. No separate longer-lived transcript archive is created. Small association/configuration records remain; no AI world-state facts are written.
 - Scribe emits finalized segments only. Event `status` is `final`; no fabricated interim speech is shown.
-- The installable module targets Foundry **v13**, using the v13.350 public API documentation. No local Foundry installation or game system was available for live verification. The manifest deliberately does not assert a verified runtime version. v12/v14 are outside this adapter's declared compatibility.
+- The installable module v0.1.1 targets Foundry **v13 and v14**, using their public sidebar, compendium and UUID APIs. The remote setup screen was identified as v14 build 369. A local Foundry runtime and the active game system remain unavailable for in-world verification. The manifest deliberately does not assert a verified runtime version. v12 is outside this adapter's declared compatibility.
 
 The existing local config, credentials and live database were not modified during development. Enabling the service and first starting it applies the migration. Existing deployments without a Copilot block still work. Once a database has paired channels, their consent checks continue even if the HTTP service is disabled; disabling the service must not bypass consent. Unpaired legacy channels retain the original Scribe behavior.
 
@@ -40,9 +40,9 @@ The command creates the campaign and DM association and prints a newly generated
 
 **Trust boundary:** Foundry client modules cannot prove their authenticated Foundry role to an unrelated HTTP server using an `isGM` field. This implementation anchors authorization in operator-provisioned, hashed, revocable GM capabilities. The module additionally checks its actual Foundry user/world and GM role, while the backend selects scope exclusively from the stored capability. It does not perform automatic Foundry account federation or server-side revalidation of subsequent Foundry role changes. Revoke credentials when a GM loses access; do not reuse a GM browser profile for players.
 
-4. Install `foundry/dm-copilot` into Foundry's `Data/modules/dm-copilot`. The packaged ZIP has that directory at its root; extract it into `Data/modules`, then enable **Scribe DM Copilot** for your world and reload. No public manifest hosting or auto-update URL is configured.
+4. Install `foundry/dm-copilot` into Foundry's `Data/modules/dm-copilot`. The packaged ZIP has that directory at its root; extract it into `Data/modules`, then enable **Scribe DM Copilot** for your world and reload. The public installation manifest is https://raw.githubusercontent.com/Rhysbleh/Dungeon-Masters-Assistant/main/module.json.
 
-The supplied archive is `artifacts/dm-copilot-0.1.0.zip`. Rebuild it after source edits with `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-foundry.ps1`.
+The supplied archive is `artifacts/dm-copilot-0.1.1.zip`. Rebuild it after source edits with `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-foundry.ps1`.
 5. Register the full command list using the existing controller:
 
 ```powershell
@@ -100,7 +100,7 @@ Run administrative migration/provisioning tools between sessions. Revocation can
 
 Automated tests run without real participant audio or a live Foundry license:
 
-Executed on 25 October 2026: **39 Node tests and 10 Python tests passed**, including all 21 original Node regressions. JavaScript source syntax checks passed. Tests create disposable SQLite stores rather than modifying live campaign data.
+Executed on 25 October 2026: **41 Node tests and 10 Python tests passed**, including all 21 original Node regressions. JavaScript source syntax checks passed. Tests create disposable SQLite stores rather than modifying live campaign data.
 
 ```powershell
 .\runtime\node\node.exe --test --test-concurrency=1 test/*.test.js
@@ -109,7 +109,7 @@ Executed on 25 October 2026: **39 Node tests and 10 Python tests passed**, inclu
 
 The integration test uses the real Manager, Scheduler, Store, HTTP/SSE server, parser, client state and compendium adapter. Discord voice transport, ASR output and Foundry documents are controlled test doubles. Separate real-codec tests check packet gating and preserve the previous audio/decryption regressions. This is automated integration evidence, not a live eight-step acceptance claim.
 
-On the actual Foundry v13 installation, record the exact Foundry/game-system versions and run:
+On the actual Foundry v13 or v14 installation, record the exact Foundry/game-system versions and run:
 
 1. Provision GM credentials for two campaigns/worlds; pair two different Discord voice channels in the same guild. Configure two existing recorder accounts to supply that guild's two voice slots.
 2. Confirm an ordinary Foundry player sees no sidebar and cannot access a stream without a provisioned capability. Confirm another campaign's capability cannot retrieve the first world's events, summaries or session history.
@@ -140,3 +140,7 @@ All routes require the scoped bearer credential and explicit browser-origin poli
 ## Public APIs checked
 
 The implementation targets the official [v13 sidebar base](https://foundryvtt.com/api/v13/classes/foundry.applications.sidebar.AbstractSidebarTab.html), [sidebar descriptors](https://foundryvtt.com/api/v13/interfaces/foundry.SidebarTabDescriptor.html), [UI configuration](https://foundryvtt.com/api/v13/variables/CONFIG.ui.html), [compendium collection](https://foundryvtt.com/api/v13/classes/foundry.documents.collections.CompendiumCollection.html), [UUID resolution](https://foundryvtt.com/api/v13/functions/foundry.utils.fromUuid.html) and [application rendering](https://foundryvtt.com/api/v13/classes/foundry.applications.api.ApplicationV2.html). These are version-specific design references, not evidence of a live runtime test.
+
+### v14 adapter references
+
+The v0.1.1 patch also checks the official [v14 sidebar base](https://foundryvtt.com/api/classes/foundry.applications.sidebar.AbstractSidebarTab.html), [sidebar descriptors](https://foundryvtt.com/api/interfaces/foundry.SidebarTabDescriptor.html), [UI configuration](https://foundryvtt.com/api/variables/CONFIG.ui.html), [compendium collection](https://foundryvtt.com/api/classes/foundry.documents.collections.CompendiumCollection.html) and [UUID resolver](https://foundryvtt.com/api/functions/foundry.utils.fromUuid.html). Tests cover v13/v14 registration, player exclusion, existing custom sidebar preservation and rejection of unsupported generations. No server addresses or credentials are included in the distribution.

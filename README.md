@@ -10,9 +10,9 @@ In Foundry's **Add-on Modules → Install Module**, paste this Manifest URL:
 https://raw.githubusercontent.com/Rhysbleh/Dungeon-Masters-Assistant/main/module.json
 ```
 
-Install, enable **Scribe DM Copilot** for your world, and reload. This version targets **Foundry v13**. Live Foundry rendering has not yet been acceptance-tested; v12/v14 compatibility is not declared.
+Install, enable **Scribe DM Copilot** for your world, and reload. This version targets **Foundry v13 and v14**. Live Foundry rendering has not yet been acceptance-tested; v12 compatibility is not declared.
 
-For manual installation, extract [dm-copilot-0.1.0.zip](https://raw.githubusercontent.com/Rhysbleh/Dungeon-Masters-Assistant/main/artifacts/dm-copilot-0.1.0.zip) into Foundry's `Data/modules` directory. The archive contains `dm-copilot/module.json` and its scripts, template and stylesheet.
+For manual installation, extract [dm-copilot-0.1.1.zip](https://raw.githubusercontent.com/Rhysbleh/Dungeon-Masters-Assistant/main/artifacts/dm-copilot-0.1.1.zip) into Foundry's `Data/modules` directory. The archive contains `dm-copilot/module.json` and its scripts, template and stylesheet.
 
 ## Required backend setup
 
@@ -36,6 +36,10 @@ Compendium contents remain in Foundry; matching does not make a paid AI request 
 
 ## Verification
 
-The companion Scribe workspace passed **39 Node tests and 10 Python tests**, including the existing Scribe regressions and an automated two-world integration fixture. External Discord/ASR/Foundry boundaries were mocked in that fixture. Real live speech, Foundry rendering and native sheet opening still require acceptance on the deployed installation. Installing this module does not imply those live checks have passed.
+The companion Scribe workspace passed **41 Node tests and 10 Python tests**, including the existing Scribe regressions and an automated two-world integration fixture. External Discord/ASR/Foundry boundaries were mocked in that fixture. Real live speech, Foundry rendering and native sheet opening still require acceptance on the deployed installation. Installing this module does not imply those live checks have passed.
 
 For the exact flow, limitations, credential revocation and consent behavior, see the integration guide.
+
+## v0.1.1 compatibility update
+
+Added a version-selected sidebar adapter for v13/v14 and preserved customized sidebar registrations. The user's Foundry setup screen identifies v14 build 369. The documented v14 sidebar, compendium and UUID APIs were reviewed; adapter tests now cover both generations. The manifest allows v14, but full in-world rendering has not yet been live-verified.
